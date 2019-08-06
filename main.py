@@ -11,6 +11,7 @@ the_jinja_env = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
     
+<<<<<<< HEAD
 class EnterInfoHandler(webapp2.RequestHandler):
     def get(self):  # for a get request
         user = users.get_current_user()
@@ -63,3 +64,17 @@ app = webapp2.WSGIApplication([
     ('/', EnterInfoHandler),
     ('/home', HomeHandler)
 ], debug=True)
+=======
+<<<<<<< HEAD
+class MainPage(webapp2.RequestHandler):
+    def get(self):  # for a get request
+        welcome_template = the_jinja_env.get_template('templates/home.html')
+        self.response.write(welcome_template.render())
+        
+
+app = webapp2.WSGIApplication([
+    ('/', MainPage),
+], debug=True)
+=======
+>>>>>>> dad331143626ea61fcd8471fe704b4f08c6d85fa
+>>>>>>> dbfad91da97498bb931c54675fcd1cdad371c3fd
