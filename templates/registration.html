@@ -1,18 +1,23 @@
 <html>
     <head>
-        
+        <link type="text/css" rel="stylesheet" href="/my-style-dir/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+        <title>Registration</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script> 
     </head>
     <body>
-        Welcome to our site, {{email_address}}!  Please sign up! <br>
-        
-        <form method="post" action="/register">
-        <br>
-        First name: <input type="text" name="first_name">
-        <br>
-        Last name: <input type="text" name="last_name">
-        <br>
-        Otter name: <input type="text" name="otter_name">
-        <input type="submit">
-        </form>
+        <h2>Welcome to our site, {{email_address}}!  Please sign up!</h2> <br>
+        <div class="registration">
+            <form method="post" action="/register">
+            <br>
+            First name: <input type="text" class="register" name="first_name">
+            <br>
+            Last name: <input type="text" class="register" name="last_name">
+            <br>
+            Otter name: <input type="text" class="register" name="otter_name"><br>
+            <input type="submit" class="sign_up" value="Sign Up">
+            </form>
+        </div>
     </body>
 </html>

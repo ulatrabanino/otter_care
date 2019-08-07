@@ -132,6 +132,7 @@ class RegistrationHandler(webapp2.RequestHandler):
         
         otter_user.put()
         
+        
         self.response.write('Thanks for signing up, %s! <br><a href="/">Home</a>' %
         otter_user.first_name)
         
