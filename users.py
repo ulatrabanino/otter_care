@@ -1,10 +1,10 @@
 from google.appengine.ext import ndb
 
-class Otter(ndb.Model):
-    water_intake = ndb.DateTimeProperty(required=False)
-    food_intake = ndb.DateTimeProperty(required=False)
-    exercise = ndb.DateTimeProperty(required=False)
-    bath = ndb.DateTimeProperty(required=False)
+class OtterSetting(ndb.Model):
+    water_num_intake = ndb.IntegerProperty(required=True)
+    food_intake = ndb.IntegerProperty(required=True)
+    exercise = ndb.IntegerProperty(required=True)
+    bath = ndb.IntegerProperty(required=True)
 
 class OtterUser(ndb.Model):
     otter_name = ndb.StringProperty()

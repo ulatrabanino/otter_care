@@ -1,7 +1,7 @@
 import webapp2
 import jinja2
 import os
-from users import OtterUser, Otter
+from users import OtterUser, OtterSetting
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
@@ -29,7 +29,6 @@ def checkLoggedInAndRegistered(request):
          request.redirect("/register")
          return 
     
-
 class HomeHandler(webapp2.RequestHandler):
     def get(self):  
         checkLoggedInAndRegistered(self)
@@ -37,19 +36,28 @@ class HomeHandler(webapp2.RequestHandler):
         the_variable_dict = {
             "logout_url":  users.create_logout_url('/')
         }
+        home_template = the_jinja_env.get_template('templates/home.html')
+        self.response.write(home_template.render(the_variable_dict))
+
+class SettingsHandler(webapp2.RequestHandler):
+    def get(self):  
+        checkLoggedInAndRegistered(self)
         
-        welcome_template = the_jinja_env.get_template('templates/home.html')
-        self.response.write(welcome_template.render(the_variable_dict))
+        settings_template = the_jinja_env.get_template('templates/settings.html')
+        self.response.write(settings_template.render())
 
     def post(self):
         checkLoggedInAndRegistered(self)
         
         user = users.get_current_user()
         
-        otter = Otter(
-            otter_name=self.request.get('user-first-ln'), 
-            owner = OtterUser.nickname(),
+        otter = OtterSetting(
+            water_num_intake=int(self.request.get('water_num_intake')),
+            food_intake=int(self.request.get('food_intake')),
+            exercise=int(self.request.get('exercise')),
+            bath=int(self.request.get('bath'))
         )
+
         otter_key = otter.put()
         self.response.write("Otter created: " + str(otter_key) + "<br>")
         self.response.write("<a href='/userotters'>All otters</a> | ")
@@ -61,7 +69,7 @@ class AllUsersHandler(webapp2.RequestHandler):
         
         
         
-        all_users = Otter.query().fetch()
+        all_users = OtterSetting.query().fetch()
         
         the_variable_dict = {
             "all_users": all_users
@@ -77,14 +85,14 @@ class UserOttersHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         email_address = user.nickname()
         
-        user_otter = Otter.query().filter(Otter.owner == email_address).fetch()
+        # user_otter = OtterSetting.query().filter(OtterSetting.owner == email_address).fetch()
         
-        the_variable_dict = {
-            "user_otter": user_otter
-        }
+        #the_variable_dict = {
+           # "user_otter": user_otter
+        #}
         
-        user_memes_template = the_jinja_env.get_template('templates/user_otter.html')
-        self.response.write(user_memes_template.render(the_variable_dict))
+        user_otter_template = the_jinja_env.get_template('templates/user_otter.html')
+        self.response.write(user_otter_template.render())
    
         
 
@@ -118,6 +126,7 @@ class RegistrationHandler(webapp2.RequestHandler):
         otter_user = OtterUser(
             first_name=self.request.get('first_name'), 
             last_name =self.request.get('last_name'), 
+            otter_name =self.request.get('otter_name'),
             email=user.nickname()
         )
         
@@ -133,5 +142,6 @@ app = webapp2.WSGIApplication([
     ('/all_users', AllUsersHandler), 
     ('/user_otter', UserOttersHandler), 
     ('/login', LoginHandler),
-    ('/register', RegistrationHandler)
+    ('/register', RegistrationHandler),
+    ('/settings', SettingsHandler)
 ], debug=True)
