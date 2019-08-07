@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link type="text/css" rel="stylesheet" href="/my-style-dir/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">
+        <title>Otter Care</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     </head>
     <body>
-        <h1>Home Page</h1>
-        <b> <a href="{{logout_url}}">Log out</a></b>
+        <h1><i class="fas fa-home"></i></h1>
+        <h1>Welcome to Otter Care!</h1>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <a href="/">Home</a>
+                <a href="#">Kitchen</a>
+                <a href="#">Bathroom</a>
+                <a href="#">Play</a>
+                <a href="#">Water Intake</a>
+                <a href="/settings">Settings</a>
+            </div>
+        </div><br>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Sea_Otter_%28Enhydra_lutris%29_%2825169790524%29_crop.jpg/440px-Sea_Otter_%28Enhydra_lutris%29_%2825169790524%29_crop.jpg">
+        <br>
+        <button class="btn" onclick="window.location.href ='{{logout_url}}';">Log Out</button>
+
     </body>
 </html>
