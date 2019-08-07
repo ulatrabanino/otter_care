@@ -15,6 +15,10 @@ class EnterInfoHandler(webapp2.RequestHandler):
     def get(self):  # for a get request
         user = users.get_current_user()
         
+        info_template = the_jinja_env.get_template('/')
+        # self.response.write(welcome_template.render(the_variable_dict))
+        self.response.write(info_template.render())
+        
         if user:
             email_address = user.nickname()
             logout_url = users.create_login_url('/')
@@ -43,12 +47,14 @@ class EnterInfoHandler(webapp2.RequestHandler):
     def post(self):
         self.response.write("Welcome! " + '<a href = "/home">Home</a>' )
         
+        
 class HomeHandler(webapp2.RequestHandler):
     def get(self):  # for a get request
     
         home_template = the_jinja_env.get_template('templates/home.html')
         # self.response.write(welcome_template.render(the_variable_dict))
         self.response.write(home_template.render())
+        
     
     # def post(self):
     #     user = users.get_current_user()
@@ -68,7 +74,6 @@ class MainPage(webapp2.RequestHandler):
     def get(self):  # for a get request
         welcome_template = the_jinja_env.get_template('templates/home.html')
         self.response.write(welcome_template.render())
-        
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
