@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Otter</title>
+  </head>
+  <body>
+    {% for meme in all_memes %}
+    
+        <div class="Otter" style="background: pink;">
+          <h2 id="line1">{{meme.line1}}</h2>
+          <h2 id="line2">{{meme.line2}}</h2>
+        </div>
+        <br> <br>
+    
+    {% endfor %}
+  </body>
+</html>

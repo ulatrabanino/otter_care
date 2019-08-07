@@ -1,7 +1,7 @@
 import webapp2
 import jinja2
 import os
-from users import OtterUser
+from users import OtterUser, Otter
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
@@ -11,70 +11,127 @@ the_jinja_env = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
     
-class EnterInfoHandler(webapp2.RequestHandler):
-    def get(self):  # for a get request
+def checkLoggedInAndRegistered(request):
+    # Check if user is logged in
+    
+    user = users.get_current_user()
+        
+    if not user: 
+        request.redirect("/login")
+        return
+    
+    # Check if user is registered
+       
+    email_address = user.nickname()
+    registered_user = OtterUser.query().filter(OtterUser.email == email_address).get()
+    
+    if not registered_user:
+         request.redirect("/register")
+         return 
+    
+
+class HomeHandler(webapp2.RequestHandler):
+    def get(self):  
+        checkLoggedInAndRegistered(self)
+        
+        the_variable_dict = {
+            "logout_url":  users.create_logout_url('/')
+        }
+        
+        welcome_template = the_jinja_env.get_template('templates/home.html')
+        self.response.write(welcome_template.render(the_variable_dict))
+
+    def post(self):
+        checkLoggedInAndRegistered(self)
+        
         user = users.get_current_user()
         
-        info_template = the_jinja_env.get_template('/')
-        # self.response.write(welcome_template.render(the_variable_dict))
-        self.response.write(info_template.render())
-        
-        if user:
-            email_address = user.nickname()
-            logout_url = users.create_login_url('/')
-            logout_html_element = '<a href = "%s">Sign out </a>' % logout_url
-            self.response.write("You`re logged in as <b>" + email_address + " Don`t forget to "+ logout_html_element)
-            
-            otter_user = OtterUser.query().filter(OtterUser.email == email_address).get()
-            
-            if otter_user:
-                self.response.write("Looks like you are registered. Thanks for using our site!")
-            else:
-                self.response.write('''
-                    Welcome to our site, %s!  Please sign up! <br>
-                    <form method="post" action="/">
-                    <input type="text" name="otter_name">
-                    <input type="submit">
-                    </form><br> %s <br>
-                    ''' % (email_address, logout_html_element))
+        otter = Otter(
+            otter_name=self.request.get('user-first-ln'), 
+            owner = OtterUser.nickname(),
+        )
+        otter_key = otter.put()
+        self.response.write("Otter created: " + str(otter_key) + "<br>")
+        self.response.write("<a href='/userotters'>All otters</a> | ")
 
-                    
-        else:
-            login_url = users.create_login_url('/')
-            login_html_element = '<a href = "%s">Sign in </a>' % login_url
-            self.response.write("Please log in <b>" + login_html_element)
-            
+
+class AllUsersHandler(webapp2.RequestHandler):
+    def get(self):
+        checkLoggedInAndRegistered(self)
+        
+        
+        
+        all_users = Otter.query().fetch()
+        
+        the_variable_dict = {
+            "all_users": all_users
+        }
+        
+        all_otter_template = the_jinja_env.get_template('templates/all_users.html')
+        self.response.write(all_otter_template.render(the_variable_dict))
+
+class UserOttersHandler(webapp2.RequestHandler):
+    def get(self):
+        checkLoggedInAndRegistered(self)
+        
+        user = users.get_current_user()
+        email_address = user.nickname()
+        
+        user_otter = Otter.query().filter(Otter.owner == email_address).fetch()
+        
+        the_variable_dict = {
+            "user_otter": user_otter
+        }
+        
+        user_memes_template = the_jinja_env.get_template('templates/user_otter.html')
+        self.response.write(user_memes_template.render(the_variable_dict))
+   
+        
+
+class LoginHandler(webapp2.RequestHandler):
+    def get(self):
+        
+        login_template = the_jinja_env.get_template('templates/login.html')
+        the_variable_dict = {
+            "login_url":  users.create_login_url('/')
+        }
+        
+        self.response.write(login_template.render(the_variable_dict))
+        
+
+class RegistrationHandler(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        
+        registration_template = the_jinja_env.get_template('templates/registration.html')
+        the_variable_dict = {
+            "email_address":  user.nickname()
+        }
+        
+        self.response.write(registration_template.render(the_variable_dict))
+    
     def post(self):
-        self.response.write("Welcome! " + '<a href = "/home">Home</a>' )
+        user = users.get_current_user()
         
+        #Create a new CSSI User in our database
         
-class HomeHandler(webapp2.RequestHandler):
-    def get(self):  # for a get request
+        otter_user = OtterUser(
+            first_name=self.request.get('first_name'), 
+            last_name =self.request.get('last_name'), 
+            email=user.nickname()
+        )
+        
+        otter_user.put()
+        
+        self.response.write('Thanks for signing up, %s! <br><a href="/">Home</a>' %
+        otter_user.first_name)
+        
+                  
     
-        home_template = the_jinja_env.get_template('templates/home.html')
-        # self.response.write(welcome_template.render(the_variable_dict))
-        self.response.write(home_template.render())
-        
-    
-    # def post(self):
-    #     user = users.get_current_user()
-    #     otter_user = OtterUser(
-    #         otter_name=self.request.get('otter_name'),
-    #         email=user.nickname())
-    #     otter_user.put()
-    #     self.response.write('Thanks for signing up, %s! <br><a href="/">Home</a>' %
-    #         otter_user.otter_name)
-            
 app = webapp2.WSGIApplication([
-    ('/', EnterInfoHandler),
-    ('/home', HomeHandler)
-], debug=True)
-
-class MainPage(webapp2.RequestHandler):
-    def get(self):  # for a get request
-        welcome_template = the_jinja_env.get_template('templates/home.html')
-        self.response.write(welcome_template.render())
-
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', HomeHandler),
+    ('/all_users', AllUsersHandler), 
+    ('/user_otter', UserOttersHandler), 
+    ('/login', LoginHandler),
+    ('/register', RegistrationHandler)
 ], debug=True)
