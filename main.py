@@ -59,8 +59,8 @@ class SettingsHandler(webapp2.RequestHandler):
         )
 
         otter_key = otter.put()
-        self.response.write("Otter created: " + str(otter_key) + "<br>")
-        self.response.write("<a href='/userotters'>All otters</a> | ")
+        home_template = the_jinja_env.get_template('templates/home.html')
+        self.response.write(home_template.render())
 
 
 class AllUsersHandler(webapp2.RequestHandler):
