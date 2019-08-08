@@ -1,0 +1,16 @@
+{% if otter.food_intake_counter == otter.food_intake %}
+    <div>
+        You have reached your goal!
+    </div>
+{% elif otter.food_intake_counter > otter.food_intake %}
+    <div>
+        You over fed your otter! Please stop and take them to exercise!
+    </div>
+{% else %}
+    <div>
+        Iʻm hungry! Feed me!
+    </div>
+{% endif %}
+<form method = POST action = "/kitchen">
+    <input type= "submit" value="feed">
+</form>
