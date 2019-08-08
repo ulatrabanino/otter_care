@@ -53,9 +53,11 @@ class SettingsHandler(webapp2.RequestHandler):
         
         otter = OtterSetting(
             water_num_intake=int(self.request.get('water_num_intake')),
+            water_counter=0,
             food_intake=int(self.request.get('food_intake')),
             food_intake_counter=0,
             exercise=int(self.request.get('exercise')),
+            exercise_counter=0,
             bath=int(self.request.get('bath')),
             bath_counter=0,
             owner=user.nickname()
@@ -164,7 +166,7 @@ class KitchenHandler(webapp2.RequestHandler):
         self.redirect("/kitchen")
         
 class BathroomHandler(webapp2.RequestHandler):
-     def get(self):
+    def get(self):
         checkLoggedInAndRegistered(self)
         user = users.get_current_user()
         
@@ -177,7 +179,7 @@ class BathroomHandler(webapp2.RequestHandler):
         
         self.response.write(bathroom_template.render(the_variable_dict))
         
-     def post(self):
+    def post(self):
         user = users.get_current_user()
         otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
         
@@ -189,8 +191,46 @@ class PlayHandler(webapp2.RequestHandler):
     def get(self):
         checkLoggedInAndRegistered(self)
         user = users.get_current_user()
-    
-    
+        
+        play_template = the_jinja_env.get_template('templates/play.html')
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        the_variable_dict = {
+            "otter": otter
+        }
+        
+        self.response.write(play_template.render(the_variable_dict))
+        
+    def post(self):
+        user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        otter.exercise_counter += 1
+        otter.put()
+        self.redirect("/play")
+        
+class WaterHandler(webapp2.RequestHandler):
+    def get(self):
+        checkLoggedInAndRegistered(self)
+        user = users.get_current_user()
+        
+        water_template = the_jinja_env.get_template('templates/water.html')
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        the_variable_dict = {
+            "otter": otter
+        }
+        
+        self.response.write(water_template.render(the_variable_dict))
+        
+    def post(self):
+        user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        otter.water_counter += 1
+        otter.put()
+        self.redirect("/water")
+        
 app = webapp2.WSGIApplication([
     ('/', HomeHandler),
     ('/all_users', AllUsersHandler), 
@@ -200,5 +240,6 @@ app = webapp2.WSGIApplication([
     ('/settings', SettingsHandler),
     ('/kitchen', KitchenHandler),
     ('/bathroom', BathroomHandler),
-    ('/play', PlayHandler)
+    ('/play', PlayHandler),
+    ('/water', WaterHandler)
 ], debug=True)

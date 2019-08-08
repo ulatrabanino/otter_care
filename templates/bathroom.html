@@ -1,0 +1,16 @@
+{% if otter.bath_counter == otter.bath %}
+    <div>
+        You have reached your goal!
+    </div>
+{% elif otter.bath_counter > otter.bath %}
+    <div>
+        You over bathed me! Please stop so I can maintain may natural oils!
+    </div>
+{% else %}
+    <div>
+        I NEED a bath please!
+    </div>
+{% endif %}
+<form method = POST action = "/bathroom">
+    <input type= "submit" value="bathe">
+</form>

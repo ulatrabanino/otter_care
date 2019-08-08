@@ -1,0 +1,16 @@
+{% if otter.exercise_counter == otter.exercise %}
+    <div>
+        You have reached your goal!
+    </div>
+{% elif otter.exercise_counter > otter.exercise %}
+    <div>
+        You wearin me out! Please stop and give me some watah!
+    </div>
+{% else %}
+    <div>
+        Play with me!
+    </div>
+{% endif %}
+<form method = POST action = "/play">
+    <input type= "submit" value="play">
+</form>
