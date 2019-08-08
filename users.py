@@ -6,6 +6,7 @@ class OtterSetting(ndb.Model):
     food_intake_counter = ndb.IntegerProperty(required=True)
     exercise = ndb.IntegerProperty(required=True)
     bath = ndb.IntegerProperty(required=True)
+    bath_counter = ndb.IntegerProperty(required=True)
     owner = ndb.StringProperty(required=True)
 
 class OtterUser(ndb.Model):

@@ -57,6 +57,7 @@ class SettingsHandler(webapp2.RequestHandler):
             food_intake_counter=0,
             exercise=int(self.request.get('exercise')),
             bath=int(self.request.get('bath')),
+            bath_counter=0,
             owner=user.nickname()
         )
 
@@ -139,6 +140,7 @@ class RegistrationHandler(webapp2.RequestHandler):
         
 class KitchenHandler(webapp2.RequestHandler):
     def get(self):
+        checkLoggedInAndRegistered(self)
         user = users.get_current_user()
         
         kitchen_template = the_jinja_env.get_template('templates/kitchen.html')
@@ -160,6 +162,28 @@ class KitchenHandler(webapp2.RequestHandler):
         # print(otter.food_intake_counter)
         otter.put()
         self.redirect("/kitchen")
+        
+class BathroomHandler(webapp2.RequestHandler):
+     def get(self):
+        checkLoggedInAndRegistered(self)
+        user = users.get_current_user()
+        
+        bathroom_template = the_jinja_env.get_template('templates/bathroom.html')
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        the_variable_dict = {
+            "otter": otter
+        }
+        
+        self.response.write(bathroom_template.render(the_variable_dict))
+        
+     def post(self):
+        user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        otter.bath_counter += 1
+        otter.put()
+        self.redirect("/bathroom")
     
     
 app = webapp2.WSGIApplication([
@@ -169,5 +193,6 @@ app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/register', RegistrationHandler),
     ('/settings', SettingsHandler),
-    ('/kitchen', KitchenHandler)
+    ('/kitchen', KitchenHandler),
+    ('/bathroom', BathroomHandler)
 ], debug=True)
