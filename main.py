@@ -132,11 +132,8 @@ class RegistrationHandler(webapp2.RequestHandler):
         
         otter_user.put()
         
-        
-        self.response.write('Thanks for signing up, %s! <br><a href="/">Home</a>' %
-        otter_user.first_name)
-        
-                  
+        afterregister_template = the_jinja_env.get_template('templates/afterregister.html')
+        self.response.write(afterregister_template.render())
     
 app = webapp2.WSGIApplication([
     ('/', HomeHandler),
