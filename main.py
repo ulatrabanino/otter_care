@@ -184,6 +184,11 @@ class BathroomHandler(webapp2.RequestHandler):
         otter.bath_counter += 1
         otter.put()
         self.redirect("/bathroom")
+        
+class PlayHandler(webapp2.RequestHandler):
+    def get(self):
+        checkLoggedInAndRegistered(self)
+        user = users.get_current_user()
     
     
 app = webapp2.WSGIApplication([
@@ -194,5 +199,6 @@ app = webapp2.WSGIApplication([
     ('/register', RegistrationHandler),
     ('/settings', SettingsHandler),
     ('/kitchen', KitchenHandler),
-    ('/bathroom', BathroomHandler)
+    ('/bathroom', BathroomHandler),
+    ('/play', PlayHandler)
 ], debug=True)
