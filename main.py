@@ -1,6 +1,7 @@
 import webapp2
 import jinja2
 import os
+import datetime
 from users import OtterUser, OtterSetting
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -15,6 +16,7 @@ def checkLoggedInAndRegistered(request):
     # Check if user is logged in
     
     user = users.get_current_user()
+    
         
     if not user: 
         request.redirect("/login")
@@ -43,13 +45,39 @@ class SettingsHandler(webapp2.RequestHandler):
     def get(self):  
         checkLoggedInAndRegistered(self)
         
+        user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
+        if otter:
+            current_time=datetime.datetime.now()
+            last_reset_time = otter.last_reset_time
+            
+            print("*"*30)
+            print(otter)
+            print("reset_time: ")
+            print(last_reset_time)
+            
+            q1= current_time.hour *60 *60 + current_time.minute *60 + current_time.second
+            q2= current_time - last_reset_time
+            
+            if q2.total_seconds() > q1:
+                otter.water_counter = 0
+                otter.food_intake_counter = 0
+                otter.exercise_counter = 0
+                otter.bath_counter = 0
+                
+                last_reset_time = current_time
+            else:
+                print("No reset")
+                
         settings_template = the_jinja_env.get_template('templates/settings.html')
         self.response.write(settings_template.render())
-
+        
     def post(self):
         checkLoggedInAndRegistered(self)
         
         user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
         
         otter = OtterSetting(
             water_num_intake=int(self.request.get('water_num_intake')),
@@ -60,9 +88,10 @@ class SettingsHandler(webapp2.RequestHandler):
             exercise_counter=0,
             bath=int(self.request.get('bath')),
             bath_counter=0,
-            owner=user.nickname()
+            owner=user.nickname(),
+            last_reset_time=datetime.datetime.now()
         )
-
+        
         otter_key = otter.put()
         home_template = the_jinja_env.get_template('templates/home.html')
         self.response.write(home_template.render())

@@ -10,6 +10,7 @@ class OtterSetting(ndb.Model):
     bath = ndb.IntegerProperty(required=True)
     bath_counter = ndb.IntegerProperty(required=True)
     owner = ndb.StringProperty(required=True)
+    last_reset_time=ndb.DateTimeProperty(required=True)
 
 class OtterUser(ndb.Model):
     otter_name = ndb.StringProperty()
