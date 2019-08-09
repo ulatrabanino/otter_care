@@ -1,16 +1,38 @@
-{% if otter.bath_counter == otter.bath %}
-    <div>
-        You have reached your goal!
-    </div>
-{% elif otter.bath_counter > otter.bath %}
-    <div>
-        You over bathed me! Please stop so I can maintain may natural oils!
-    </div>
-{% else %}
-    <div>
-        I NEED a bath please!
-    </div>
-{% endif %}
-<form method = POST action = "/bathroom">
-    <input type= "submit" value="bathe">
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/my-style-dir/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">  
+        <link rel="shortcut icon" href="/my-images-dir/logo.PNG"/>
+        <title>Bathroom</title>
+    </head>
+    <body>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+            <a href="/">Home</a>
+            <a href="/kitchen">Kitchen</a>
+            <a href="/play">Play</a>
+            <a href="/water">Water Intake</a>
+            </div>
+        </div><br><br>
+    {% if otter.bath_counter == otter.bath %}
+        <div>
+            You have reached your goal!
+        </div>
+    {% elif otter.bath_counter > otter.bath %}
+        <div>
+            You over bathed me! Please stop so I can maintain may natural oils!
+        </div>
+    {% else %}
+        <div>
+            I NEED a bath please!
+        </div>
+    {% endif %}
+    <form method = POST action = "/bathroom">
+        <img src="/my-images-dir/bath.png" height="450"/><br>
+        <input type= "submit" class="btn" value="bathe">
+    </form>
+    
+    </body>
+</html>

@@ -1,19 +1,21 @@
 <!DOCTYPE HTML> 
 <html>
     <head>
-    
+        <link type="text/css" rel="stylesheet" href="/my-style-dir/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">  
+        <link rel="shortcut icon" href="/my-images-dir/logo.PNG"/>
+        <title>Kitchen</title>    
     </head>
     <body>
         <div class="dropdown">
             <button class="dropbtn">Menu</button>
             <div class="dropdown-content">
                 <a href="/">Home</a>
-                <a href="#">Bathroom</a>
-                <a href="#">Play</a>
-                <a href="#">Water Intake</a>
-                <a href="/settings">Settings</a>
+                <a href="/bathroom">Bathroom</a>
+                <a href="/play">Play</a>
+                <a href="/water">Water Intake</a>
             </div>
-        </div><br>
+        </div><br><br>
         {% if otter.food_intake_counter == otter.food_intake %}
         <div>
         You have reached your goal!
@@ -28,7 +30,8 @@
         </div>
         {% endif %}
         <form method = POST action = "/kitchen">
-        <input type= "submit" value="feed">
+        <img src="/my-images-dir/kitchen.png" height="450"/>
+        <input type= "submit" class="btn" value="feed">
         </form>
     </body>
 </html>
