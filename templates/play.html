@@ -1,3 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="/my-style-dir/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap" rel="stylesheet">  
+        <link rel="shortcut icon" href="/my-images-dir/logo.PNG"/>
+        <title>Outdoors</title>
+    </head>
+    <body>
+        <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+                <a href="/">Home</a>
+                <a href="/kitchen">Kitchen</a>
+                <a href="/bathroom">Bathroom</a>
+                <a href="/water">Water Intake</a>
+            </div>
+        </div><br><br>
 {% if otter.exercise_counter == otter.exercise %}
     <div>
         You have reached your goal!
@@ -12,5 +30,9 @@
     </div>
 {% endif %}
 <form method = POST action = "/play">
-    <input type= "submit" value="play">
+        <img src="/my-images-dir/play.png" class="background" height="450"/><br>
+        <img src="/my-images-dir/play.PNG" class="otter2" width="250"/><br>
+    <input type= "submit" class="btn" value="play">
 </form>
+    </body>
+    </html>

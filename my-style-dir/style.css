@@ -98,3 +98,27 @@ img {
     background-color: #43e092;
     color: white;
 }
+
+.background{
+    	position: relative;
+		top: 0;
+		left: 0;
+}
+
+.otter{
+		position: absolute;
+		top: 150px;
+		left: 500px;    
+}
+
+.otter2{
+		position: absolute;
+		top: 150px;
+		left: 400px;    
+}
+
+.otter3{
+		position: absolute;
+		top: 150px;
+		left: 400px;    
+}
