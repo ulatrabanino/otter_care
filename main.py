@@ -34,8 +34,10 @@ def checkLoggedInAndRegistered(request):
      
 def reset_state():
         user = users.get_current_user()
+        if user is None:
+            return 'User already Exist !'
+       
         otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
-        
         if otter:
             current_time=datetime.datetime.now()
             last_reset_time = otter.last_reset_time
