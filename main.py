@@ -60,8 +60,12 @@ class HomeHandler(webapp2.RequestHandler):
         
         reset_state()
         
+        user = users.get_current_user()
+        otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
+        
         the_variable_dict = {
-            "logout_url":  users.create_logout_url('/')
+            "logout_url":  users.create_logout_url('/'),
+            "otter": otter
         }
         home_template = the_jinja_env.get_template('templates/home.html')
         self.response.write(home_template.render(the_variable_dict))
