@@ -20,7 +20,7 @@ def checkLoggedInAndRegistered(request):
         
     if not user: 
         request.redirect("/login")
-        return
+        return False
     
     # Check if user is registered
        
@@ -29,13 +29,13 @@ def checkLoggedInAndRegistered(request):
     
     if not registered_user:
          request.redirect("/register")
-         return 
-     
+         return False
+    return True
      
 def reset_state():
         user = users.get_current_user()
-        if user is None:
-            return 'User already Exist !'
+        #if user is None:
+           #return 'User already Exist !'
        
         otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
         if otter:
@@ -55,14 +55,17 @@ def reset_state():
                 
                 
 class HomeHandler(webapp2.RequestHandler):
-    def get(self):  
-        checkLoggedInAndRegistered(self)
+    def get(self):
+        if not checkLoggedInAndRegistered(self):
+            return
         
         reset_state()
         
         user = users.get_current_user()
         otter = OtterSetting.query().filter(OtterSetting.owner == user.nickname()).get()
-        
+        #if otter is None:
+          #  return 'User already Exist !'
+            
         the_variable_dict = {
             "logout_url":  users.create_logout_url('/'),
             "otter": otter
@@ -73,7 +76,8 @@ class HomeHandler(webapp2.RequestHandler):
 
 class AllUsersHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         
         
         
@@ -88,7 +92,8 @@ class AllUsersHandler(webapp2.RequestHandler):
 
 class UserOttersHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         
         user = users.get_current_user()
         email_address = user.nickname()
@@ -106,7 +111,7 @@ class UserOttersHandler(webapp2.RequestHandler):
 
 class LoginHandler(webapp2.RequestHandler):
     def get(self):
-        
+
         login_template = the_jinja_env.get_template('templates/login.html')
         the_variable_dict = {
             "login_url":  users.create_login_url('/')
@@ -117,6 +122,7 @@ class LoginHandler(webapp2.RequestHandler):
 
 class RegistrationHandler(webapp2.RequestHandler):
     def get(self):
+
         user = users.get_current_user()
         
         registration_template = the_jinja_env.get_template('templates/registration.html')
@@ -158,7 +164,8 @@ class RegistrationHandler(webapp2.RequestHandler):
         
 class KitchenHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         user = users.get_current_user()
         
         kitchen_template = the_jinja_env.get_template('templates/kitchen.html')
@@ -183,7 +190,8 @@ class KitchenHandler(webapp2.RequestHandler):
         
 class BathroomHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         user = users.get_current_user()
         
         bathroom_template = the_jinja_env.get_template('templates/bathroom.html')
@@ -205,7 +213,8 @@ class BathroomHandler(webapp2.RequestHandler):
         
 class PlayHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         user = users.get_current_user()
         
         play_template = the_jinja_env.get_template('templates/play.html')
@@ -227,7 +236,8 @@ class PlayHandler(webapp2.RequestHandler):
         
 class WaterHandler(webapp2.RequestHandler):
     def get(self):
-        checkLoggedInAndRegistered(self)
+        if not checkLoggedInAndRegistered(self):
+            return
         user = users.get_current_user()
         
         water_template = the_jinja_env.get_template('templates/water.html')
