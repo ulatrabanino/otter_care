@@ -30,6 +30,9 @@
         Please give me some water!
     </div>
 {% endif %}
+<div>
+    <p>Glasses of water from goal: {{otter.water_counter}} / {{otter.water_num_intake}}</p>
+</div>
 <form method = POST action = "/water">
         <img src="/my-images-dir/water.png" class="background" height="450"/><br>
         <img src="/my-images-dir/drink.png" class="otter3" width="350"/><br>

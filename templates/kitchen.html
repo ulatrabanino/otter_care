@@ -29,6 +29,9 @@
         Iʻm hungry! Feed me!
         </div>
         {% endif %}
+        <div>
+            <p>Number of meals from goal: {{otter.food_intake_counter}} / {{otter.food_intake}}</p>
+        </div>
         <form method = POST action = "/kitchen">
         <img src="/my-images-dir/kitchen.png" class="background" height="450"/><br>
         <img src="/my-images-dir/eat.PNG" class="otter" width="450"/><br>

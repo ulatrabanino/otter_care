@@ -29,6 +29,9 @@
             I NEED a bath please!
         </div>
     {% endif %}
+    <div>
+        <p>Number of baths from goal: {{otter.bath_counter}} / {{otter.bath}}</p>
+    </div>
     <form method = POST action = "/bathroom">
         <img src="/my-images-dir/bath.png" class="background" height="450"/><br>
         <img src="/my-images-dir/wash.png" class="otter" width="450"/><br>
